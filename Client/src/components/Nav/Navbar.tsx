@@ -1,7 +1,7 @@
 const Navbar = () => {
   return (
-    <div className="flex m-5">
-      <button className="font-semibold text-blue-500">Home</button>
+    <div className="flex my-5 mx-6">
+      <button className="font-semibold text-green-600 text-lg">Home</button>
     </div>
   );
 };
