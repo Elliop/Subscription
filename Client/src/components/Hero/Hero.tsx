@@ -1,4 +1,14 @@
+import { useState } from "react";
+import LoginModal from "../Modal/LoginModal";
+import SignupModal from "../Modal/SignupModal";
+
 const Hero = () => {
+  const [login, setLogin] = useState(false);
+  const [signup, setSignup] = useState(false);
+  const showLogin = () => setLogin(true);
+  const closeLogin = () => setLogin(false);
+  const showSignup = () => setSignup(true);
+  const closeSignup = () => setSignup(false);
   return (
     <div
       style={{
@@ -6,7 +16,9 @@ const Hero = () => {
       }}
       className="w-full h-screen bg-no-repeat bg-cover flex justify-center"
     >
-      <div className="flex justify-center items-center w-96 h-96 bg-green-700 mr-96 mt-28 rounded-md shadow-lg">
+      {login && <LoginModal onClose={closeLogin} />}
+      {signup && <SignupModal onClose={closeSignup} />}
+      <div className="flex justify-center items-center w-96 h-96 bg-green-700 md:mr-96 mt-28 rounded-md shadow-lg">
         <div className="p-6 m-5">
           <h1 className=" text-4xl font-bold text-white mb-4">
             Feed your mind with the best articles
@@ -16,17 +28,21 @@ const Hero = () => {
             article by highly reputable individuals
           </h5>
           <div className="mt-6 flex justify-between">
-            <button className="bg-blue-500 text-white text-lg font-semibold py-2 px-12 rounded-md">
+            <button
+              onClick={showLogin}
+              className="bg-blue-500 text-white text-lg font-semibold py-2 px-12 rounded-md"
+            >
               Login
             </button>
-            <button className="bg-red-500 text-white text-lg font-semibold py-2 px-10 rounded-md">
+            <button
+              onClick={showSignup}
+              className="bg-red-500 text-white text-lg font-semibold py-2 px-10 rounded-md"
+            >
               Signup
             </button>
           </div>
         </div>
       </div>
-      {/*  */}
-      {/*  */}
     </div>
   );
 };
