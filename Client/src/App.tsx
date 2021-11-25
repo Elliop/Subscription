@@ -1,8 +1,11 @@
+import Hero from "./components/Hero/Hero";
+import Navbar from "./components/Nav/Navbar";
+
 const App = () => {
   return (
-    <div className="text-blue-500">
-      {/*  */}
-      Hello World!
+    <div>
+      <Navbar />
+      <Hero />
     </div>
   );
 };
