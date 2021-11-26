@@ -1,9 +1,27 @@
+import axios from "axios";
+import { useState } from "react";
+
 const SignupModal = (props: any) => {
-  const handleFormSubmit = (e: any) => {
+  const [eroorMsg, setEroorMsg] = useState("");
+
+  const handleFormSubmit = async (e: any) => {
     e.preventDefault();
     let email = e.target.elements.email?.value;
     let password = e.target.elements.password?.value;
-    console.log(email, password);
+    let data;
+
+    const { data: signUpData } = await axios.post(
+      "http://localhost:8080/auth/signup",
+      {
+        email,
+        password,
+      }
+    );
+    data = signUpData;
+
+    if (data.errors.length) {
+      setEroorMsg(data.errors[0].msg);
+    }
   };
   return (
     <>
@@ -59,8 +77,11 @@ const SignupModal = (props: any) => {
                   placeholder="Your Password"
                 />
               </div>
+              {eroorMsg && <div className="text-red-500">{eroorMsg}</div>}
+
               <div className="flex justify-center items-center mt-6">
                 <button
+                  type="submit"
                   className="bg-green-500 py-2 px-8 text-lg text-white 
                 rounded border border-green focus:outline-none focus:border-green-dark"
                 >
