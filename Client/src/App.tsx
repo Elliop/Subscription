@@ -3,6 +3,7 @@ import Navbar from "./components/Nav/Navbar";
 import Articles from "./pages/Articles";
 import ArticlesPlan from "./pages/ArticlesPlan";
 import LandingPage from "./pages/LandingPage";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -10,10 +11,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/articles">
+        <Route path="/articles" element={<ProtectedRoute />}>
           <Route path="/articles" element={<Articles />} />
         </Route>
-        <Route path="/article-plans">
+        <Route path="/article-plans" element={<ProtectedRoute />}>
           <Route path="/article-plans" element={<ArticlesPlan />} />
         </Route>
       </Routes>
