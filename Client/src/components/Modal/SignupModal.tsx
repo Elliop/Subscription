@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const SignupModal = (props: any) => {
   const [eroorMsg, setEroorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
@@ -20,8 +22,10 @@ const SignupModal = (props: any) => {
     data = signUpData;
 
     if (data.errors.length) {
-      setEroorMsg(data.errors[0].msg);
+      return setEroorMsg(data.errors[0].msg);
     }
+    localStorage.setItem("token", data.data.token);
+    navigate("/articles");
   };
   return (
     <>
