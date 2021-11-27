@@ -1,16 +1,18 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
+import { UserContext } from "../../context";
 
 const SignupModal = (props: any) => {
   const [eroorMsg, setEroorMsg] = useState("");
   const navigate = useNavigate();
+  const [state, setState] = useContext(UserContext);
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
     let email = e.target.elements.email?.value;
     let password = e.target.elements.password?.value;
-    let data;
+    let response;
 
     const { data: signUpData } = await axios.post(
       "http://localhost:8080/auth/signup",
@@ -19,12 +21,25 @@ const SignupModal = (props: any) => {
         password,
       }
     );
-    data = signUpData;
+    response = signUpData;
 
-    if (data.errors.length) {
-      return setEroorMsg(data.errors[0].msg);
+    if (response.errors.length) {
+      return setEroorMsg(response.errors[0].msg);
     }
-    localStorage.setItem("token", data.data.token);
+    // Set State
+    setState({
+      data: {
+        id: response.data.user.id,
+        email: response.data.user.email,
+        stripeCustomerId: response.data.user.stripeCustomerId,
+      },
+      loading: false,
+      error: null,
+    });
+    localStorage.setItem("token", response.data.token);
+    axios.defaults.headers.common[
+      "authorization"
+    ] = `Bearer ${response.data.token}`;
     navigate("/articles");
   };
   return (
