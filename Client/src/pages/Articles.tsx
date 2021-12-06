@@ -35,6 +35,7 @@ const Articles = () => {
                 <img
                   src={article.imageUrl}
                   className="rounded-2xl object-contain h-96"
+                  alt="Article"
                 />
               </div>
               <p className="text-lg font-semibold my-2">{article.title}</p>
