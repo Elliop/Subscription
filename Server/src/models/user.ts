@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -12,6 +12,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
     min: 5,
+  },
+  stripeCustomerId: {
+    type: String,
+    required: true,
   },
 });
 

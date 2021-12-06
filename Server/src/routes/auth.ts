@@ -4,27 +4,31 @@ import User from "../models/user";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
 import { checkAuth } from "../middleware/checkAuth";
+import { stripe } from "../utils/stripe";
 
 const router = express.Router();
 
 router.post(
   "/signup",
-  body("email").isEmail().withMessage("The email is invald"),
-  body("password").isLength({ min: 5 }).withMessage("The password is invald"),
+  body("email").isEmail().withMessage("The email is invalid"),
+  body("password").isLength({ min: 5 }).withMessage("The password is invalid"),
   async (req, res) => {
     const validationErrors = validationResult(req);
+
     if (!validationErrors.isEmpty()) {
       const errors = validationErrors.array().map((error) => {
         return {
           msg: error.msg,
         };
       });
+
       return res.json({ errors, data: null });
     }
 
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
+
     if (user) {
       return res.json({
         errors: [
@@ -37,10 +41,22 @@ router.post(
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const customer = await stripe.customers.create(
+      {
+        email,
+      },
+      {
+        apiKey: process.env.STRIPE_SECRET_KEY,
+      }
+    );
+
     const newUser = await User.create({
       email,
       password: hashedPassword,
+      stripeCustomerId: customer.id,
     });
+
     const token = await JWT.sign(
       { email: newUser.email },
       process.env.JWT_SECRET as string,
@@ -56,6 +72,7 @@ router.post(
         user: {
           id: newUser._id,
           email: newUser.email,
+          stripeCustomerId: customer.id,
         },
       },
     });
