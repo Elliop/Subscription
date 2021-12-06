@@ -21,6 +21,17 @@ const ArticlesPlan = () => {
     Premium: "pink",
   };
 
+  const createSession = async (priceId: string) => {
+    const { data: response } = await axios.post(
+      "http://localhost:8080/subs/session",
+      {
+        priceId,
+      }
+    );
+
+    window.location.href = response.url;
+  };
+
   return (
     <div className="w-full pt-8">
       <div className="flex flex-col sm:flex-row justify-center mb-6 sm:mb-0">
@@ -35,7 +46,10 @@ const ArticlesPlan = () => {
             <div className="p-8 text-3xl font-bold text-center">
               {price.nickname}
             </div>
-            <button className="inline-block bg-blue-300 text-white px-6 py-4 rounded hover:bg-green-darker hover:text-white hover:no-underline">
+            <button
+              onClick={() => createSession(price.id)}
+              className="inline-block bg-blue-300 text-white px-6 py-4 rounded hover:bg-green-darker hover:text-white hover:no-underline"
+            >
               Buy Now
             </button>
           </div>
